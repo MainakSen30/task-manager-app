@@ -9,31 +9,22 @@ def create_task(body: Task, db: Session):
     new_task = TaskModel(
         title = data['title'],
         description = data['description'],
-        is_completed = data['completed']
+        is_completed = data['is_completed']
     )
     db.add(new_task)
     db.commit()
     db.refresh(new_task)
-    return {
-        "status": "task created successfully",
-        "data": new_task
-    }
+    return new_task
 
 def get_tasks(db: Session):
     tasks = db.query(TaskModel).all()
-    return {
-        "status": "All the data retrieved successfully",
-        "data": tasks
-    }
+    return tasks
 
 def get_task_by_id(task_id: int, db: Session):
     one_task = db.query(TaskModel).get(task_id)
     if not one_task:
         raise HTTPException(404, detail = "Task id incorrect")
-    return {
-        "status": "task retrieved successfully",
-        "data": one_task
-    }
+    return one_task
 
 
 def update_task(task_id: int, body: Task, db: Session):
@@ -48,10 +39,7 @@ def update_task(task_id: int, body: Task, db: Session):
     db.add(one_task)
     db.commit()
     db.refresh(one_task)
-    return {
-        "status": "task updated successfully",
-        "data": one_task
-    }
+    return one_task
 
 def delete_task(task_id: int, db: Session):
     one_task = db.query(TaskModel).get(task_id)
@@ -59,7 +47,4 @@ def delete_task(task_id: int, db: Session):
         raise HTTPException(404, detail = "Task not found with the given ID")
     db.delete(one_task)
     db.commit()
-    return {
-        "status": "task deleted successfully",
-        "data": one_task
-    }
+    return None

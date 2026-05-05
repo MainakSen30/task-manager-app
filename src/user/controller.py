@@ -65,7 +65,7 @@ def login_user(body: UserLogin, db: Session):
     token = jwt.encode({
         "_id": user.id,
         "username": user.username,
-        "exp": (datetime.now(timezone.utc) + timedelta(seconds=settings.EXP_TIME)).timestamp()
+        "exp": (datetime.now(timezone.utc) + timedelta(minutes=settings.EXP_TIME)).timestamp()
     }, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 
     return {
